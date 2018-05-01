@@ -15,47 +15,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.smartloli.kafka.game.x.book_4.serialization;
+package org.smartloli.kafka.game.x.book_4;
 
-import java.io.Serializable;
+import java.util.Map;
+
+import org.apache.kafka.clients.producer.Partitioner;
+import org.apache.kafka.common.Cluster;
 
 /**
- * 声明一个序列化类.
- * 
+ * 实现一个自定义分区类.
+ *
  * @author smartloli.
  *
  *         Created by Apr 30, 2018
  */
-public class JSalarySerial implements Serializable {
+public class JPartitioner implements Partitioner {
 
-	/**
-	 * 序列化版本ID.
-	 */
-	private static final long serialVersionUID = 1L;
-
-	private String id;// 用户ID
-	private String salary;// 金额
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getSalary() {
-		return salary;
-	}
-
-	public void setSalary(String salary) {
-		this.salary = salary;
-	}
-
-	// 打印对象属性值
 	@Override
-	public String toString() {
-		return "JSalarySerial [id=" + id + ", salary=" + salary + "]";
+	public void configure(Map<String, ?> configs) {
+
+	}
+
+	/** 实现Kafka主题分区索引算法. */
+	@Override
+	public int partition(String topic, Object key, byte[] keyBytes, Object value, byte[] valueBytes, Cluster cluster) {
+		int partition = 0;
+		String k = (String) key;
+		partition = Math.abs(k.hashCode()) % cluster.partitionCountForTopic(topic);
+		return partition;
+	}
+
+	@Override
+	public void close() {
+
 	}
 
 }

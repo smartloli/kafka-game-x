@@ -18,9 +18,7 @@
 package org.smartloli.kafka.game.x.book_4.serialization;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 /**
  * 封装一个序列化的工具类.
@@ -31,24 +29,17 @@ import java.io.ObjectOutputStream;
  */
 public class SerializeUtils {
 
-	/** 实现序列化的逻辑. */
+	/** 实现序列化. */
 	public static byte[] serialize(Object object) {
-		ObjectOutputStream outs = null;
-		ByteArrayOutputStream byteOuts = null;
 		try {
-			// 序列化
-			byteOuts = new ByteArrayOutputStream();// 实例化字节数组
-			outs = new ObjectOutputStream(byteOuts);// 实例化对象输出流
-			outs.writeObject(object);// 写入对象
-			byte[] bytes = byteOuts.toByteArray();
-			return bytes;// 返回字节数组
+			return object.toString().getBytes("UTF8");// 返回字节数组
 		} catch (Exception e) {
 			e.printStackTrace(); // 抛出异常信息
 		}
 		return null;
 	}
 
-	/** 实现反序列化的逻辑. */
+	/** 实现反序列化. */
 	@SuppressWarnings("unchecked")
 	public static <T> Object deserialize(byte[] bytes, Class<T> className) {
 		ByteArrayInputStream bais = null;

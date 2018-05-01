@@ -17,7 +17,6 @@
  */
 package org.smartloli.kafka.game.x.book_4.serialization;
 
-import java.util.Date;
 import java.util.Properties;
 
 import org.apache.kafka.clients.producer.Callback;
@@ -28,8 +27,6 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSONObject;
-
 /**
  * 自定义序列化, 发送消息给Kafka.
  * 
@@ -37,10 +34,10 @@ import com.alibaba.fastjson.JSONObject;
  *
  *         Created by Apr 30, 2018
  */
-public class JProducerSerial extends Thread{
-	
+public class JProducerSerial extends Thread {
+
 	private static Logger LOG = LoggerFactory.getLogger(JProducerSerial.class);
-	
+
 	/** 配置Kafka连接信息. */
 	public Properties configure() {
 		Properties props = new Properties();
@@ -51,7 +48,7 @@ public class JProducerSerial extends Thread{
 		props.put("linger.ms", 1); // 延时提交
 		props.put("buffer.memory", 33554432); // 缓冲大小
 		props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer"); // 序列化主键
-		props.put("value.serializer", "org.smartloli.kafka.game.x.book_4.serialization.JSalarySeralizer");// 序列化值
+		props.put("value.serializer", "org.smartloli.kafka.game.x.book_4.serialization.JSalarySeralizer");// 自定义序列化值
 
 		return props;
 	}
@@ -63,26 +60,21 @@ public class JProducerSerial extends Thread{
 
 	/** 实现一个单线程生产者客户端. */
 	public void run() {
-		Producer<String, String> producer = new KafkaProducer<>(configure());
-		// 发送100条JSON格式的数据
-		for (int i = 0; i < 100; i++) {
-			// 封装JSON格式
-			JSONObject json = new JSONObject();
-			json.put("id", i);
-			json.put("ip", "192.168.0." + i);
-			json.put("date", new Date().toString());
-			String k = "key" + i;
-			// 异步发送
-			producer.send(new ProducerRecord<String, String>("test_kafka_game_x", k, json.toJSONString()), new Callback() {
-				public void onCompletion(RecordMetadata metadata, Exception e) {
-					if (e != null) {
-						LOG.error("Send error, msg is " + e.getMessage());
-					} else {
-						LOG.info("The offset of the record we just sent is: " + metadata.offset());
-					}
+		Producer<String, JSalarySerial> producer = new KafkaProducer<>(configure());
+		JSalarySerial jss = new JSalarySerial();
+		jss.setId("2018");
+		jss.setSalary("100");
+
+		producer.send(new ProducerRecord<String, JSalarySerial>("test_kafka_game_x", "key", jss), new Callback() {
+			public void onCompletion(RecordMetadata metadata, Exception e) {
+				if (e != null) {
+					LOG.error("Send error, msg is " + e.getMessage());
+				} else {
+					LOG.info("The offset of the record we just sent is: " + metadata.offset());
 				}
-			});
-		}
+			}
+		});
+
 		try {
 			sleep(3000);// 间隔3秒
 		} catch (InterruptedException e) {

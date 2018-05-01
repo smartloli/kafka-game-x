@@ -57,7 +57,8 @@ public class JProducerThread extends Thread {
 		props.put("buffer.memory", 33554432); // 缓冲大小
 		props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer"); // 序列化主键
 		props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");// 序列化值
-
+		props.put("partitioner.class", "org.smartloli.kafka.game.x.book_4.JPartitioner");// 指定自定义分区类
+		
 		return props;
 	}
 
