@@ -15,35 +15,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.smartloli.kafka.game.x.book_4.serialization;
+package org.smartloli.kafka.game.x.book_5.deserialize;
+
+import java.util.Map;
+
+import org.apache.kafka.common.serialization.Deserializer;
+import org.smartloli.kafka.game.x.book_4.serialization.SerializeUtils;
 
 /**
- * 封装一个序列化的工具类.
+ * 实现自定义反序列化.
  * 
  * @author smartloli.
  *
- *         Created by Apr 30, 2018
+ *         Created by May 6, 2018
  */
-public class SerializeUtils {
+public class JSalaryDeserializer implements Deserializer<Object> {
 
-	/** 实现序列化. */
-	public static byte[] serialize(Object object) {
-		try {
-			return object.toString().getBytes("UTF8");// 返回字节数组
-		} catch (Exception e) {
-			e.printStackTrace(); // 抛出异常信息
-		}
-		return null;
+	@Override
+	public void configure(Map<String, ?> configs, boolean isKey) {
+
 	}
 
-	/** 实现反序列化. */
-	public static <T> Object deserialize(byte[] bytes) {
-		try {
-			return new String(bytes, "UTF8");// 反序列化
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+	/** 自定义反序列逻辑. */
+	@Override
+	public Object deserialize(String topic, byte[] data) {
+		return SerializeUtils.deserialize(data);
+	}
+
+	@Override
+	public void close() {
+
 	}
 
 }

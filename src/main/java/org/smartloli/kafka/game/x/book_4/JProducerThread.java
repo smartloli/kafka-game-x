@@ -75,7 +75,7 @@ public class JProducerThread extends Thread {
 	public void run() {
 		Producer<String, String> producer = new KafkaProducer<>(configure());
 		// 发送100条JSON格式的数据
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			// 封装JSON格式
 			JSONObject json = new JSONObject();
 			json.put("id", i);
@@ -83,7 +83,7 @@ public class JProducerThread extends Thread {
 			json.put("date", new Date().toString());
 			String k = "key" + i;
 			// 异步发送
-			producer.send(new ProducerRecord<String, String>("test_kafka_game_x", k, json.toJSONString()), new Callback() {
+			producer.send(new ProducerRecord<String, String>("kv3_topic", k, json.toJSONString()), new Callback() {
 				public void onCompletion(RecordMetadata metadata, Exception e) {
 					if (e != null) {
 						LOG.error("Send error, msg is " + e.getMessage());

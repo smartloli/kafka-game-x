@@ -65,7 +65,7 @@ public class JProducerSerial extends Thread {
 		jss.setId("2018");
 		jss.setSalary("100");
 
-		producer.send(new ProducerRecord<String, JSalarySerial>("test_kafka_game_x", "key", jss), new Callback() {
+		producer.send(new ProducerRecord<String, JSalarySerial>("test_topic_ser_des", "key", jss), new Callback() {
 			public void onCompletion(RecordMetadata metadata, Exception e) {
 				if (e != null) {
 					LOG.error("Send error, msg is " + e.getMessage());
