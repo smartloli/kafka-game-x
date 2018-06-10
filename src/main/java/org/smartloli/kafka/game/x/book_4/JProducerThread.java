@@ -83,7 +83,7 @@ public class JProducerThread extends Thread {
 			json.put("date", new Date().toString());
 			String k = "key" + i;
 			// 异步发送
-			producer.send(new ProducerRecord<String, String>("kv3_topic", k, json.toJSONString()), new Callback() {
+			producer.send(new ProducerRecord<String, String>("ip_login_rt", k, json.toJSONString()), new Callback() {
 				public void onCompletion(RecordMetadata metadata, Exception e) {
 					if (e != null) {
 						LOG.error("Send error, msg is " + e.getMessage());

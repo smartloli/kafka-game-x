@@ -57,7 +57,7 @@ public class JConsumerSubscribe extends Thread {
 		// 创建一个消费者实例对象
 		KafkaConsumer<String, String> consumer = new KafkaConsumer<>(configure());
 		// 订阅消费主题集合
-		consumer.subscribe(Arrays.asList("test_kafka_game_x"));
+		consumer.subscribe(Arrays.asList("ip_login_rt"));
 		// 实时消费标识
 		boolean flag = true;
 		while (flag) {
