@@ -19,9 +19,9 @@ public class IgniteStreamingSQLQuery implements Runnable {
 	private static final long POLL_TIMEOUT = 3000;
 	private final Logger LOG = LoggerFactory.getLogger(IgniteStreamingSQLQuery.class);
 
-	private static final List<String> QUERIES = Arrays.asList("SELECT deviceId, SUM(rxData) AS rxTotal, SUM(txData) AS txTOTAL FROM NetworkSignalDomain " + "GROUP BY deviceId ORDER BY rxTotal DESC, txTotal DESC LIMIT 5",
-			"SELECT networkType, SUM(rxData) AS rxTotal, SUM(txData) AS txTotal FROM NetworkSignalDomain GROUP BY networkType",
-			"SELECT networkType, AVG(rxSpeed) AS avgRxSpeed, AVG(txSpeed) AS avgTxSpeed FROM NetworkSignalDomain GROUP BY networkType");
+	private static final List<String> QUERIES = Arrays.asList("SELECT deviceId, SUM(rxData) AS rxTotal, " + "SUM(txData) AS txTOTAL FROM NetworkSignalDomain " + "GROUP BY deviceId ORDER BY rxTotal DESC, txTotal DESC LIMIT 5",
+			"SELECT networkType, SUM(rxData) AS rxTotal, SUM(txData) AS txTotal " + "FROM NetworkSignalDomain GROUP BY networkType",
+			"SELECT networkType, AVG(rxSpeed) AS avgRxSpeed, AVG(txSpeed) AS avgTxSpeed" + " FROM NetworkSignalDomain GROUP BY networkType");
 
 	@Override
 	public void run() {
@@ -49,9 +49,4 @@ public class IgniteStreamingSQLQuery implements Runnable {
 			networkSignalRepository.close();
 		}
 	}
-
-	public static void main(String[] args) throws InterruptedException {
-		new IgniteStreamingSQLQuery().run();
-	}
-
 }

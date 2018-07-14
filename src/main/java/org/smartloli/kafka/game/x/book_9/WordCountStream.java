@@ -42,8 +42,8 @@ import org.apache.kafka.streams.kstream.ValueMapper;
 public class WordCountStream {
 	public static void main(String[] args) throws Exception {
 		Properties props = new Properties(); // 实例化一个属性对象
-		props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-wordcount"); // 配置一个应用ID
-		props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092"); // 配置Kafka集群地址
+		props.put(StreamsConfig.APPLICATION_ID_CONFIG, "kstreams_wordcount"); // 配置一个应用ID
+		props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "dn1:9092,dn2:9092,dn3:9092"); // 配置Kafka集群地址
 		props.put(StreamsConfig.KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName()); // 设置序列化与反序列类键属性
 		props.put(StreamsConfig.VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName()); // 设置序列化与反序列类值属性
 
@@ -51,7 +51,7 @@ public class WordCountStream {
 
 		KStreamBuilder builder = new KStreamBuilder(); // 实例化一个流处理构建对象
 
-		KStream<String, String> source = builder.stream("streams-file-input"); // 指定一个输入流主题
+		KStream<String, String> source = builder.stream("streams_wordcount_input"); // 指定一个输入流主题
 
 		// 执行统计单词逻辑
 		KTable<String, Long> counts = source.flatMapValues(new ValueMapper<String, Iterable<String>>() {
@@ -64,16 +64,11 @@ public class WordCountStream {
 			public KeyValue<String, String> apply(String key, String value) {
 				return new KeyValue<>(value, value);
 			}
-		}).groupByKey().count("Counts");
+		}).groupByKey().count("counts");
 
-		counts.to(Serdes.String(), Serdes.Long(), "streams-wordcount-output");// 将统计结果输出到一个流主题中
+		counts.print(); // 输出统计结果
 
 		KafkaStreams streams = new KafkaStreams(builder, props); // 实例化一个流处理对象
 		streams.start(); // 执行流处理
-
-		// 通常情况下,流应用程序是一个常驻进程,会一直存在于后台. 如果需要停止,可以强制执行停止操作.
-		// Thread.sleep(5000L);
-
-		// streams.close();
 	}
 }

@@ -54,7 +54,7 @@ public class RandomNetworkDataProducer implements Runnable {
 			networkData.setSignals(new ArrayList<>());
 			for (int j = 0; j < random.nextInt(4) + 1; j++) {
 				NetworkSignal networkSignal = new NetworkSignal();
-				networkSignal.setNetworkType(i % 2 == 0 ? "mobile" : "wifi");
+				networkSignal.setNetworkType(i % 2 == 0 ? "4G" : "wifi");
 				networkSignal.setRxData((long) random.nextInt(1000));
 				networkSignal.setTxData((long) random.nextInt(1000));
 				networkSignal.setRxSpeed((double) random.nextInt(100));
@@ -81,10 +81,6 @@ public class RandomNetworkDataProducer implements Runnable {
 		}
 
 		producer.close();
-	}
-
-	public static void main(String[] args) throws Exception {
-		new RandomNetworkDataProducer().run();
 	}
 
 }

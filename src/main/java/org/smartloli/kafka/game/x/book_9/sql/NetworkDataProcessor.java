@@ -42,9 +42,4 @@ public class NetworkDataProcessor implements Runnable {
         KafkaStreams streams = new KafkaStreams(builder, config);
         streams.start();
     }
-
-    public static void main(String[] args) throws Exception {
-        new NetworkDataProcessor().run();
-    }
-
 }
